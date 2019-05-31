@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.elo.prova.exame2.model.PessoaModel;
-import com.elo.prova.exame2.utils.ObjHelper;
+import com.elo.prova.utils.ObjHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-
-import java.sql.Date;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -58,12 +56,11 @@ public class PessoaResourceTest {
 
         PessoaModel pessoaModel = new PessoaModel();
         pessoaModel.setNome("Renato");
-        pessoaModel.setDataNascimento(Date.valueOf("1982-09-22"));
 
         String pessoaJson = ObjHelper.objToJsonString(pessoaModel);
 
         mockMvc.perform(post("/pessoas/add")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(pessoaJson)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
@@ -77,19 +74,17 @@ public class PessoaResourceTest {
 
         PessoaModel pessoaModel = new PessoaModel();
         pessoaModel.setNome("Jaque");
-        pessoaModel.setDataNascimento(Date.valueOf("1987-06-20"));
 
         String pessoaJson = ObjHelper.objToJsonString(pessoaModel);
 
         mockMvc.perform(put("/pessoas/update/2")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(pessoaJson)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(2)))
                 .andExpect(jsonPath("nome", is("Jaque")));
-
     }
 
     @Test

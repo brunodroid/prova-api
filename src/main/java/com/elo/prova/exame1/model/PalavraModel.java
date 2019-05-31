@@ -12,11 +12,7 @@ public class PalavraModel {
     private int tamanho;
     private String dica;
 
-    public PalavraModel() {
-        this.palavra = "TESTE";
-        this.tamanho = 5;
-        this.dica = "Unitário";
-    }
+    public PalavraModel() { }
 
     public PalavraModel(String palavra, String dica) {
         this.palavra = palavra.trim();

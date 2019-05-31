@@ -1,7 +1,7 @@
 package com.elo.prova.exame2.resource;
 
 import com.elo.prova.exame2.model.PessoaContatoModel;
-import com.elo.prova.exame2.utils.ObjHelper;
+import com.elo.prova.utils.ObjHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

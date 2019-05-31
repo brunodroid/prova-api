@@ -4,12 +4,12 @@ import com.elo.prova.exame1.model.PalavraModel;
 import com.elo.prova.exame1.model.JogadaModel;
 import com.elo.prova.exame1.repository.JogadaRepository;
 import com.elo.prova.exame1.repository.PalavraRepository;
-import com.elo.prova.exame1.utils.Status;
+import com.elo.prova.exame1.enums.Status;
+import com.elo.prova.utils.ObjHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
-import java.text.Normalizer;
 
 @Service
 public class JogadaService {
@@ -19,42 +19,7 @@ public class JogadaService {
     @Autowired
     private PalavraRepository palavraRepository;
 
-    private void validarStatus(JogadaModel jogadaModel) {
-
-        if (jogadaModel.getStatus().equals(Status.CANCELLED)) {
-            throw new InvalidParameterException("Essa jogada está cancelada");
-        }
-
-        if ((jogadaModel.getStatus().equals(Status.FINISHED) ||
-                (jogadaModel.getStatus().equals(Status.GAME_OVER)))) {
-            throw new InvalidParameterException("Essa jogada está encerrada");
-        }
-    }
-
-    private JogadaModel findJogadaById(Long idJogada) {
-
-        return jogadaRepository.findById(idJogada)
-                .orElseThrow(() -> new InvalidParameterException("Jogada não localizada"));
-    }
-
-    public JogadaModel iniciar(int qtdVidas) {
-
-        //TODO = geração de palavras
-        PalavraModel palavraModel = new PalavraModel("TESTE","Unitário");
-
-        palavraRepository.save(palavraModel);
-
-        JogadaModel jogadaModel = new JogadaModel(palavraModel, qtdVidas);
-
-        jogadaRepository.save(jogadaModel);
-
-        return jogadaModel;
-    }
-
-    public JogadaModel tentarLetra(Long idJogada, String letraInformada) {
-
-        String letraNormalizada = Normalizer.normalize(letraInformada, Normalizer.Form.NFD)
-                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "").toUpperCase();
+    private void validarAtributos(Long idJogada, String letraNormalizada) {
 
         if (idJogada == null) {
             throw new InvalidParameterException("ID Jogada inválido");
@@ -67,21 +32,65 @@ public class JogadaService {
         if (letraNormalizada.length() != 1) {
             throw new InvalidParameterException("Informe apenas uma letra");
         }
+    }
+
+    private void validarStatus(JogadaModel jogadaModel) {
+
+        if (jogadaModel.getStatus().equals(Status.CANCELLED)) {
+            throw new InvalidParameterException("Essa jogada está cancelada");
+        }
+
+        if (jogadaModel.getStatus().equals(Status.FINISHED) ||
+                jogadaModel.getStatus().equals(Status.GAME_OVER)) {
+            throw new InvalidParameterException("Essa jogada está encerrada");
+        }
+    }
+
+    private void validarTentativa(JogadaModel jogadaModel, String letraNormalizada) {
+
+        if (jogadaModel.getLetrasInformadas().contains(letraNormalizada)) {
+            throw new InvalidParameterException(String.format("A letra %s já foi informada", letraNormalizada));
+        }
+    }
+
+    private JogadaModel findJogadaById(Long idJogada) {
+
+        return jogadaRepository.findById(idJogada)
+                .orElseThrow(() -> new InvalidParameterException("Jogada não localizada"));
+    }
+
+    private PalavraModel findPalavraById(Long idPalavra) {
+
+        return palavraRepository.findById(idPalavra)
+                .orElseThrow(() -> new InvalidParameterException("Palavra não localizada"));
+    }
+
+    public JogadaModel iniciar(int qtdVidas) {
+
+        PalavraModel palavraModel = new PalavraModel("TESTE","Unitário");
+
+        palavraRepository.save(palavraModel);
+
+        JogadaModel jogadaModel = new JogadaModel(palavraModel, qtdVidas);
+
+        return jogadaRepository.save(jogadaModel);
+    }
+
+    public JogadaModel tentarLetra(Long idJogada, String letraInformada) {
+
+        String letraNormalizada = ObjHelper.normalizarString(letraInformada);
+
+        validarAtributos(idJogada, letraNormalizada);
 
         JogadaModel jogadaModel = findJogadaById(idJogada);
 
         validarStatus(jogadaModel);
 
-        if (jogadaModel.getLetrasInformadas().contains(letraNormalizada)) {
-            throw new InvalidParameterException(String.format("A letra %s já foi informada", letraNormalizada));
-        }
+        validarTentativa(jogadaModel, letraNormalizada);
 
-        jogadaModel.setLetrasInformadas(jogadaModel.getLetrasInformadas()
-                .concat(String.format(" %s", letraNormalizada)).trim()
-                .replace(" ", ","));
+        jogadaModel.atualizarLetrasInformadas(letraNormalizada);
 
-        PalavraModel palavraModel = palavraRepository.findById(jogadaModel.getIdPalavra())
-                .orElseThrow(() -> new InvalidParameterException("Palavra não localizada"));
+        PalavraModel palavraModel = findPalavraById(jogadaModel.getIdPalavra());
 
         String mensagemComplementar = String.format("A letra %s ", letraNormalizada);
 
@@ -105,34 +114,18 @@ public class JogadaService {
             mensagemComplementar = mensagemComplementar.concat("está correta!");
 
         } else {
-            jogadaModel.setQtdVidas(jogadaModel.getQtdVidas() - 1);
+            jogadaModel.atualizarQtdVidas();
 
             mensagemComplementar = mensagemComplementar.concat("não faz parte da palavra.");
         }
 
-        jogadaModel.setQtdTentativas(jogadaModel.getQtdTentativas() + 1);
+        jogadaModel.atualizarQtdTentativas();
 
-        if (palavraModel.getPalavra().equals(jogadaModel.getPalavraMontada())) {
-            jogadaModel.setStatus(Status.FINISHED);
-            jogadaModel.setFeedBackMessage(String.format("Parabéns! :D Você acertou a palavra %s com %d tentativa(s).",
-                    palavraModel.getPalavra(),
-                    jogadaModel.getQtdTentativas()));
+        jogadaModel.atualizarStatus(palavraModel);
 
-        } else if (jogadaModel.getQtdVidas() == 0) {
-            jogadaModel.setStatus(Status.GAME_OVER);
-            jogadaModel.setFeedBackMessage(String.format("Você perdeu! :( A palavra era: %s",
-                    palavraModel.getPalavra()));
+        jogadaModel.atualizarFeedBackMessage(palavraModel, mensagemComplementar);
 
-        } else {
-            jogadaModel.setStatus(Status.RUNNING);
-            jogadaModel.setFeedBackMessage(String.format("%s Você ainda possui %d chance(s).",
-                    mensagemComplementar,
-                    jogadaModel.getQtdVidas()));
-        }
-
-        jogadaRepository.save(jogadaModel);
-
-        return jogadaModel;
+        return jogadaRepository.save(jogadaModel);
     }
 
     public JogadaModel cancelar(Long idJogada) {
@@ -144,8 +137,6 @@ public class JogadaService {
         jogadaModel.setStatus(Status.CANCELLED);
         jogadaModel.setFeedBackMessage("Jogo cancelado.");
 
-        jogadaRepository.save(jogadaModel);
-
-        return jogadaModel;
+        return jogadaRepository.save(jogadaModel);
     }
 }

@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class PessoaService {
 
@@ -21,7 +19,7 @@ public class PessoaService {
     }
 
     public PessoaModel getPessoa(Long id) {
-        return pessoaRepository.findById(id).get();
+        return pessoaRepository.getOne(id);
     }
 
     public PessoaModel addPessoa(PessoaModel pessoaModel) {
@@ -31,7 +29,7 @@ public class PessoaService {
     public PessoaModel updatePessoa(Long id, PessoaModel pessoaModel) {
         PessoaModel pessoaModelDB = pessoaRepository.getOne(id);
 
-        BeanUtils.copyProperties(pessoaModel, pessoaModelDB, "id");
+        BeanUtils.copyProperties(pessoaModel, pessoaModelDB, "id", "pessoaContatos");
 
         pessoaRepository.save(pessoaModelDB);
 

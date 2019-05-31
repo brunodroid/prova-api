@@ -19,8 +19,7 @@ public class PessoaContatoModel {
     @JoinColumn(name = "id_pessoa")
     private PessoaModel pessoaModel;
 
-    public PessoaContatoModel() {
-    }
+    public PessoaContatoModel() { }
 
     public Long getId() {
         return id;

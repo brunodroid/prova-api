@@ -12,8 +12,8 @@ public class JogadaResource {
     @Autowired
     private JogadaService jogadaService;
 
-    @GetMapping("/iniciar/{qtdVidas}")
-    public JogadaModel iniciar(@PathVariable int qtdVidas) {
+    @GetMapping("/iniciar")
+    public JogadaModel iniciar(@RequestParam int qtdVidas) {
 
         return jogadaService.iniciar(qtdVidas);
     }

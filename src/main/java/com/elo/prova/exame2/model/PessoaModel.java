@@ -1,10 +1,9 @@
 package com.elo.prova.exame2.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -16,14 +15,12 @@ public class PessoaModel {
     private Long id;
     private String nome;
     private String rg;
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
 
     @OneToMany(mappedBy = "pessoaModel", cascade = CascadeType.ALL)
     private Set<PessoaContatoModel> pessoaContatos;
 
-    public PessoaModel() {
-    }
+    public PessoaModel() { }
 
     public Long getId() {
         return id;
@@ -49,11 +46,11 @@ public class PessoaModel {
         this.rg = rg;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 

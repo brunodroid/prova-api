@@ -27,12 +27,11 @@ public class JogadaResourceTest {
     @Test
     public void iniciarTest() throws Exception {
 
-        mockMvc.perform(get("/jogo/iniciar/5")
+        mockMvc.perform(get("/jogo/iniciar?qtdVidas=5")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("idPalavra", is(1)))
                 .andExpect(jsonPath("palavraMontada", is("_____")))
                 .andExpect(jsonPath("letrasInformadas", is("")))
                 .andExpect(jsonPath("qtdVidas", is(5)))
@@ -50,7 +49,6 @@ public class JogadaResourceTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("idPalavra", is(1)))
                 .andExpect(jsonPath("palavraMontada", is("_E__E")))
                 .andExpect(jsonPath("letrasInformadas", is("E")))
                 .andExpect(jsonPath("qtdVidas", is(5)))

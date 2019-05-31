@@ -1,7 +1,7 @@
 package com.elo.prova.exame1.service;
 
 import com.elo.prova.exame1.model.JogadaModel;
-import com.elo.prova.exame1.utils.Status;
+import com.elo.prova.exame1.enums.Status;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

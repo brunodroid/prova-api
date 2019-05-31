@@ -1,9 +1,8 @@
 package com.elo.prova.exame2.model;
 
-import com.elo.prova.exame1.utils.Status;
 import org.junit.Test;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +13,7 @@ public class PessoaModelTest {
         PessoaModel pessoaModel = new PessoaModel();
         pessoaModel.setId(1L);
         pessoaModel.setNome("Bruno");
-        pessoaModel.setDataNascimento(Date.valueOf("1987-09-25"));
+        pessoaModel.setDataNascimento(LocalDate.of(1987,9,25));
 
         assertEquals(pessoaModel.getId().longValue(), 1L);
         assertEquals(pessoaModel.getNome(), "Bruno");
