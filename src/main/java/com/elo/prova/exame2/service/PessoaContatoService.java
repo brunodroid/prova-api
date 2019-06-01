@@ -40,7 +40,7 @@ public class PessoaContatoService {
     public PessoaContatoModel updatePessoaContato(Long id, PessoaContatoModel pessoaContatoModel) {
         PessoaContatoModel pessoaContatoModelDB = pessoaContatoRepository.getOne(id);
 
-        BeanUtils.copyProperties(pessoaContatoModel, pessoaContatoModelDB, "id");
+        BeanUtils.copyProperties(pessoaContatoModel, pessoaContatoModelDB, "id", "pessoaModel");
 
         pessoaContatoRepository.save(pessoaContatoModelDB);
 
