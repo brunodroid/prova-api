@@ -28,8 +28,6 @@ public class JogadaServiceTest {
         JogadaModel jogadaModel = jogadaService.iniciar(5);
 
         assertEquals(jogadaModel.getId().longValue(), 1L);
-        assertEquals(jogadaModel.getIdPalavra().longValue(), 1L);
-        assertEquals(jogadaModel.getPalavraMontada(), "_____");
         assertEquals(jogadaModel.getLetrasInformadas(), "");
         assertEquals(jogadaModel.getQtdVidas(), 5);
         assertEquals(jogadaModel.getQtdTentativas(), 0);
@@ -39,11 +37,10 @@ public class JogadaServiceTest {
     @Test
     public void tentarLetraTest() {
 
-        iniciarTest();
+        jogadaService.iniciar(5);
 
         JogadaModel jogadaModel = jogadaService.tentarLetra(1L, "T");
 
-        assertEquals(jogadaModel.getPalavraMontada(), "T__T_");
         assertEquals(jogadaModel.getLetrasInformadas(), "T");
         assertEquals(jogadaModel.getQtdTentativas(), 1);
         assertEquals(jogadaModel.getStatus(), Status.RUNNING);
@@ -52,7 +49,7 @@ public class JogadaServiceTest {
     @Test
     public void cancelarTest() {
 
-        iniciarTest();
+        jogadaService.iniciar(5);
 
         JogadaModel jogadaModel = jogadaService.cancelar(1L);
 

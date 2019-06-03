@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
+import java.util.List;
+import java.util.Random;
 
 @Service
 public class JogadaService {
@@ -49,14 +51,8 @@ public class JogadaService {
     private void validarTentativa(JogadaModel jogadaModel, String letraNormalizada) {
 
         if (jogadaModel.getLetrasInformadas().contains(letraNormalizada)) {
-            throw new InvalidParameterException(String.format("A letra %s já foi informada", letraNormalizada));
+            throw new InvalidParameterException(String.format("A letra \"%s\" já foi informada", letraNormalizada));
         }
-    }
-
-    private JogadaModel findJogadaById(Long idJogada) {
-
-        return jogadaRepository.findById(idJogada)
-                .orElseThrow(() -> new InvalidParameterException("Jogada não localizada"));
     }
 
     private PalavraModel findPalavraById(Long idPalavra) {
@@ -65,9 +61,28 @@ public class JogadaService {
                 .orElseThrow(() -> new InvalidParameterException("Palavra não localizada"));
     }
 
+    private PalavraModel palavraAleatoria() {
+        Random random = new Random();
+        Long idAleatorio = (long) (random.nextInt(20 - 1 + 1) + 1);
+
+        return palavraRepository.findById(idAleatorio).orElse(
+                new PalavraModel("TESTE", "Unitário")
+        );
+    }
+
+    public JogadaModel findJogadaById(Long idJogada) {
+
+        return jogadaRepository.findById(idJogada)
+                .orElseThrow(() -> new InvalidParameterException("Jogada não localizada"));
+    }
+
+    public List<JogadaModel> listarRanking() {
+        return jogadaRepository.findByStatus(Status.FINISHED);
+    }
+
     public JogadaModel iniciar(int qtdVidas) {
 
-        PalavraModel palavraModel = new PalavraModel("TESTE","Unitário");
+        PalavraModel palavraModel = palavraAleatoria();
 
         palavraRepository.save(palavraModel);
 
@@ -92,7 +107,7 @@ public class JogadaService {
 
         PalavraModel palavraModel = findPalavraById(jogadaModel.getIdPalavra());
 
-        String mensagemComplementar = String.format("A letra %s ", letraNormalizada);
+        String mensagemComplementar = String.format("A letra \"%s\" ", letraNormalizada);
 
         if (palavraModel.getPalavra().contains(letraNormalizada)) {
 

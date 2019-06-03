@@ -27,12 +27,11 @@ public class JogadaResourceTest {
     @Test
     public void iniciarTest() throws Exception {
 
-        mockMvc.perform(get("/jogo/iniciar?qtdVidas=5")
+        mockMvc.perform(post("/jogos/iniciar?qtdVidas=5")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("palavraMontada", is("_____")))
                 .andExpect(jsonPath("letrasInformadas", is("")))
                 .andExpect(jsonPath("qtdVidas", is(5)))
                 .andExpect(jsonPath("qtdTentativas", is(0)))
@@ -44,14 +43,12 @@ public class JogadaResourceTest {
 
         iniciarTest();
 
-        mockMvc.perform(put("/jogo/tentar?idJogada=1&letra=E")
+        mockMvc.perform(post("/jogos/tentar?idJogada=1&letra=E")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("palavraMontada", is("_E__E")))
                 .andExpect(jsonPath("letrasInformadas", is("E")))
-                .andExpect(jsonPath("qtdVidas", is(5)))
                 .andExpect(jsonPath("qtdTentativas", is(1)))
                 .andExpect(jsonPath("status", is("RUNNING")));
     }
@@ -61,7 +58,7 @@ public class JogadaResourceTest {
 
         iniciarTest();
 
-        mockMvc.perform(post("/jogo/cancelar?idJogada=1")
+        mockMvc.perform(post("/jogos/cancelar?idJogada=1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())

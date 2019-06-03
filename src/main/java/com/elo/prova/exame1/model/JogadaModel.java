@@ -18,9 +18,8 @@ public class JogadaModel {
     private int qtdVidas = 0;
     private int qtdTentativas = 0;
     private Status status = Status.START;
-    private String feedBackMessage = "";
-
-    @JsonIgnore
+    private String dica = "";
+    private String feedBackMessage = "Jogo iniciado. Que a Força esteja com você!";
     private Long idPalavra;
 
     public JogadaModel() {}
@@ -28,9 +27,9 @@ public class JogadaModel {
     public JogadaModel(PalavraModel palavraModel, int qtdVidas) {
         this.idPalavra = palavraModel.getId();
         this.qtdVidas = qtdVidas;
-        this.feedBackMessage = String.format("Jogo iniciado. A dica é: %s. Boa Sorte!", palavraModel.getDica());
+        this.dica = palavraModel.getDica();
 
-        while (palavraModel.getTamanho() > this.palavraMontada.length()) {
+        while (palavraModel.getPalavra().length() > this.palavraMontada.length()) {
             this.palavraMontada = this.palavraMontada.concat("_");
         }
     }
@@ -58,12 +57,12 @@ public class JogadaModel {
 
         switch (getStatus()) {
             case FINISHED:
-                setFeedBackMessage(String.format("Parabéns! :D Você acertou a palavra %s com %d tentativa(s).",
+                setFeedBackMessage(String.format("Parabéns! Você acertou a palavra %s com %d tentativa(s).",
                     palavraModel.getPalavra(),
                     getQtdTentativas()));
                 break;
             case GAME_OVER:
-                setFeedBackMessage(String.format("Você perdeu! :( A palavra era: %s",
+                setFeedBackMessage(String.format("Você perdeu! A palavra era: %s",
                     palavraModel.getPalavra()));
                 break;
             case RUNNING:
@@ -139,6 +138,14 @@ public class JogadaModel {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getDica() {
+        return dica;
+    }
+
+    public void setDica(String dica) {
+        this.dica = dica;
     }
 
     public String getFeedBackMessage() {

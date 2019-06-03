@@ -12,7 +12,6 @@ public class PalavraModelTest {
 
         assertEquals(palavraModel.getPalavra(), "TESTE");
         assertEquals(palavraModel.getDica(), "Unitário");
-        assertEquals(palavraModel.getTamanho(), 5);
     }
 
 }

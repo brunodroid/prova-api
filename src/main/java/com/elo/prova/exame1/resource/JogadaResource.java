@@ -5,20 +5,33 @@ import com.elo.prova.exame1.service.JogadaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+import java.util.List;
+
 @RestController
-@RequestMapping("/jogo")
+@RequestMapping("/jogos")
 public class JogadaResource {
 
     @Autowired
     private JogadaService jogadaService;
 
-    @GetMapping("/iniciar")
+    @GetMapping("/jogada")
+    public  JogadaModel getJogada(@RequestParam("idJogada") Long idJogada) {
+        return jogadaService.findJogadaById(idJogada);
+    }
+
+    @GetMapping("/ranking")
+    public List<JogadaModel> listarRanking() {
+        return jogadaService.listarRanking();
+    }
+
+    @PostMapping("/iniciar")
     public JogadaModel iniciar(@RequestParam int qtdVidas) {
 
         return jogadaService.iniciar(qtdVidas);
     }
 
-    @PutMapping("/tentar")
+    @PostMapping("/tentar")
     public JogadaModel tentarLetra(@RequestParam Long idJogada,
                                    @RequestParam String letra){
 
