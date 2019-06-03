@@ -22,6 +22,7 @@ public class JogadaResource {
 
     @GetMapping("/ranking")
     public List<JogadaModel> listarRanking() {
+
         return jogadaService.listarRanking();
     }
 
