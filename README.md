@@ -1,7 +1,9 @@
-# dependencies
+# prova-elo
 
-Spring Boot: 2.1.5
+dependencies:
 
-Angular CLI: 7.3.9
+- Spring Boot: 2.1.5
 
-Node: 10.15.3
+- Angular CLI: 7.3.9
+
+- Node: 10.15.3
