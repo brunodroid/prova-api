@@ -1,0 +1,49 @@
+<section class="my-4">
+  <div class="container">
+    <h2><span class="star-jedi-font">Jogo da Força</span>
+      <form class="form-inline right" method="post" #jogoForm="ngForm" (ngSubmit)="jogoStart(qtdVidas)">
+        <input type="number" min=1 class="form-control" id="qtdVidas" placeholder="Qtd de Vidas" name="qtdVidas"
+          [(ngModel)]="qtdVidas" required autofocus>
+        <button type="submit" class="btn btn-primary" [disabled]="jogoForm.invalid">Iniciar
+          um novo Jogo</button>
+      </form>
+    </h2>
+  </div>
+</section>
+
+<section>
+  <table>
+    <tr>
+      <td>
+        <ul>
+          <li>
+            <p>O <b>Jogo da Força</b> funciona como um <b>Jogo da Forca</b> convencional.
+              Porém se você perde, quem te enforca é o Darth Vader.</p>
+            Então, se for ver bem, é muito mais legal que o jogo da forca normal.
+          </li>
+        </ul>
+        <br />
+
+        <div>
+          <section>
+            <div class="container">
+              <h2>Ranking de Jogadas
+              </h2>
+            </div>
+          </section>
+
+          <section>
+            <ul>
+              <li *ngFor="let jogada of rankingJogadas">
+                <div class="right">{{ jogada.qtdTentativas }} tentativas e {{ jogada.qtdVidas }} vida(s)</div>
+                <a routerLink="/jogos/play/{{ jogada.id }}">{{jogada.palavraMontada}}</a>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </td>
+      <td>
+        <img class="img-start-page" src="../../../assets/personagens/start-page.jpg"></td>
+    </tr>
+  </table>
+</section>

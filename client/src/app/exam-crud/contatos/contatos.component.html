@@ -1,0 +1,26 @@
+<main role="main">
+  <form method="post" #formulario="ngForm" (ngSubmit)="savePessoaContato(pessoa, contato)">
+    <section class="my-4">
+      <div class="container">
+        <h2>Contato de {{ pessoa.nome }}
+          <div style="float:right;">
+            <button type="button" class="btn btn-danger" *ngIf="editMode"
+              (click)="deletePessoaContato(pessoa, contato)">Excluir</button>
+            <span>&nbsp;</span>
+            <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid">Gravar</button>
+          </div>
+        </h2>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome" [(ngModel)]="contato.nome"
+            required />
+        </div>
+      </div>
+    </section>
+  </form>
+</main>

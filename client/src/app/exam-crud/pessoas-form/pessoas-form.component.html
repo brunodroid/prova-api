@@ -1,0 +1,57 @@
+<main role="main">
+  <form method="post" #formulario="ngForm" (ngSubmit)="savePessoa(pessoa)">
+    <section class="my-4">
+      <div class="container">
+        <h2>Dados da Pessoa
+          <div style="float:right;">
+            <button type="submit" class="btn btn-primary" [disabled]="formulario.invalid">Gravar</button>
+          </div>
+        </h2>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="form-group">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" class="form-control" placeholder="Nome" [(ngModel)]="pessoa.nome"
+            required />
+        </div>
+
+        <div class="form-group">
+          <label for="rg">RG</label>
+          <input type="text" id="rg" name="rg" class="form-control" placeholder="RG" [(ngModel)]="pessoa.rg" />
+        </div>
+
+        <div class="form-group">
+          <label for="dataNascimento">Data Nascimento</label>
+          <input type="date" id="dataNascimento" name="dataNascimento" class="form-control"
+            [(ngModel)]="pessoa.dataNascimento" />
+        </div>
+
+      </div>
+    </section>
+  </form>
+
+  <div *ngIf="displayContatos">
+    <section>
+      <div class="container">
+        <h2>Contatos da Pessoa
+          <div style="float:right;">
+            <button type="button" class="btn btn-primary" (click)="navegarAdd()">Cadastrar Contato</button>
+          </div>
+        </h2>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <ul>
+          <li *ngFor="let contato of pessoa.pessoaContatos">
+            <a routerLink="/pessoas/{{ pessoa.id }}/contatos/{{ contato.id }}">{{contato.nome}}</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</main>

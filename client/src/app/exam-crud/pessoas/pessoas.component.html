@@ -1,0 +1,42 @@
+<section class="my-4">
+  <div class="container">
+    <h2>Pessoas CRUD
+      <div class="form-inline right">
+        <button type="button" class="btn btn-primary" [routerLink]="'add'">Cadastrar Pessoa</button>
+      </div>
+    </h2>
+  </div>
+</section>
+<section class="mt-5">
+  <div class="container">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="thead-light text-center">
+          <tr>
+            <th></th>
+            <th class="w-25">Código</th>
+            <th class="w-50">Nome</th>
+            <th class="w-25">RG</th>
+            <th class="w-25">Nascimento</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let pessoa of pessoas">
+            <td class="text-center w-10">
+              <button type="button" class="btn btn-secondary" routerLink="/pessoas/{{ pessoa.id }}">Alterar</button>
+            </td>
+            <td class="text-center w-10">{{ pessoa.id }}</td>
+            <td class="text-center w-25">{{ pessoa.nome }}</td>
+            <td class="text-center w-10">{{ pessoa.rg }}</td>
+            <td class="text-center w-10">{{ pessoa.dataNascimento | date: "dd/MM/yyyy" }}</td>
+            <td class="text-center w-10">
+              <button type="button" class="btn btn-danger" (click)="deletePessoa(pessoa)">Excluir</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
