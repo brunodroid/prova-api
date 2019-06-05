@@ -55,6 +55,13 @@ public class JogadaService {
         }
     }
 
+    private void validarQtdVidas(int qtdVidas) {
+
+        if (qtdVidas <= 0) {
+            throw new InvalidParameterException("A Qtd de Vidas deve ser maior que zero");
+        }
+    }
+
     private PalavraModel findPalavraById(Long idPalavra) {
 
         return palavraRepository.findById(idPalavra)
@@ -81,6 +88,8 @@ public class JogadaService {
     }
 
     public JogadaModel iniciar(int qtdVidas) {
+
+        validarQtdVidas(qtdVidas);
 
         PalavraModel palavraModel = palavraAleatoria();
 
