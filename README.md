@@ -1,6 +1,6 @@
 # prova-elo
 
-dependencies:
+ambiente:
 
 - Spring Boot: 2.1.5
 
